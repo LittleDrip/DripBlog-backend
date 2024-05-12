@@ -7,7 +7,7 @@ server:
 #druid连接池
 spring:
   datasource:
-      url: jdbc:mysql://localhost:3306/drip_blog
+      url: jdbc:mysql://localhost:3306/dp_blog
       username: root
       password: 123456
       driver-class-name: com.mysql.cj.jdbc.Driver
