@@ -1,0 +1,34 @@
+# server配置
+server:
+  port: 7777
+  servlet:
+    context-path: /
+
+#druid连接池
+spring:
+  datasource:
+      url: jdbc:mysql://localhost:3306/drip_blog
+      username: root
+      password: 123456
+      driver-class-name: com.mysql.cj.jdbc.Driver
+
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  type-aliases-package: com.drip.pojo
+  global-config:
+    db-config:
+      logic-delete-field: delFlag
+      logic-not-delete-value: 0
+      logic-delete-value: 1
+    # 配置MyBatis-Plus操作表的默认前缀=>@TableName
+    # table-prefix: t_
+    # 配置MyBatis-Plus的主键策略=>@TableID(type=?)
+    id-type: auto
+
+#jwt配置
+jwt:
+  token:
+    tokenExpiration: 120 #有效时间,单位分钟
+    tokenSignKey: dripBlog #当前程序签名秘钥 自定义
