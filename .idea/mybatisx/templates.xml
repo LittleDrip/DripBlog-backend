@@ -67,8 +67,8 @@
             <option name="tableUIInfoList">
               <list>
                 <TableUIInfo>
-                  <option name="className" value="Article" />
-                  <option name="tableName" value="dp_article" />
+                  <option name="className" value="Category" />
+                  <option name="tableName" value="dp_category" />
                 </TableUIInfo>
               </list>
             </option>

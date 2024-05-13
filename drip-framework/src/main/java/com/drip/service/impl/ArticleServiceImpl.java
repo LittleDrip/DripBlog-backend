@@ -40,7 +40,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
         List<Article> articles = page.getRecords();
 //        List<HotArticle> hotArticles=new ArrayList<>();
 //        for (Article article : articles) {
-////            Bean拷贝到vo
+////            Bea·n拷贝到vo
 //            HotArticle vo=new HotArticle();
 //            BeanUtils.copyProperties(article,vo);
 //            hotArticles.add(vo);
