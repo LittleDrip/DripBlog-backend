@@ -12,4 +12,6 @@ import com.drip.utils.Result;
 public interface ArticleService extends IService<Article> {
 
     Result hotArticleList();
+
+    Result articleList(Long categoryId, Integer pageNum, Integer pageSize);
 }

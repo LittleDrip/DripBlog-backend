@@ -7,12 +7,14 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * @TableName dp_article
  */
 @TableName(value ="dp_article")
 @Data
+@Accessors(chain = true)
 public class Article implements Serializable {
     @TableId
     private Long id;
@@ -24,6 +26,9 @@ public class Article implements Serializable {
     private String summary;
 
     private Long categoryId;
+
+    @TableField(exist = false)
+    private String categoryName;
 
     private String thumbnail;
 

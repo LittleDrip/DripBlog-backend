@@ -5,18 +5,25 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.drip.constants.SystemConstants;
 import com.drip.domain.Article;
-import com.drip.domain.vo.HotArticle;
+import com.drip.domain.Category;
+import com.drip.domain.vo.ArticleListVo;
+import com.drip.domain.vo.HotArticleVo;
+import com.drip.domain.vo.PageVo;
+import com.drip.mapper.CategoryMapper;
 import com.drip.service.ArticleService;
 import com.drip.mapper.ArticleMapper;
+import com.drip.service.CategoryService;
 import com.drip.utils.BeanCopyUtils;
 import com.drip.utils.Result;
-import com.drip.utils.ResultCodeEnum;
-import org.springframework.beans.BeanUtils;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @author qq316
@@ -28,6 +35,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
         implements ArticleService {
     @Autowired
     private ArticleMapper articleMapper;
+    @Autowired
+    private CategoryMapper categoryMapper;
 
     @Override
     public Result hotArticleList() {
@@ -45,8 +54,30 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article>
 //            BeanUtils.copyProperties(article,vo);
 //            hotArticles.add(vo);
 //        }
-        List<HotArticle> hotArticles = BeanCopyUtils.copyBeanList(articles, HotArticle.class);
+        List<HotArticleVo> hotArticles = BeanCopyUtils.copyBeanList(articles, HotArticleVo.class);
         return Result.ok(hotArticles);
+    }
+
+    @Override
+    public Result articleList(Long categoryId, Integer pageNum, Integer pageSize) {
+        //只能查询正式发布的文章
+        //置顶文章显示在最前面
+        LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Objects.nonNull(categoryId) && categoryId > 0, Article::getCategoryId, categoryId);
+        queryWrapper.eq(Article::getStatus, SystemConstants.ARTICLE_STATUS_NORMAL);
+        queryWrapper.orderByDesc(Article::getIsTop);
+        Page<Article> page = new Page<>(pageNum, pageSize);
+        page(page, queryWrapper);
+        List<Article> articles = page.getRecords();
+//        查询categoryName
+//        通过ID来查name
+        articles = articles.stream()
+                .map(article -> article.setCategoryName(categoryMapper.selectById(article.getCategoryId()).getName()))
+                .collect(Collectors.toList());
+//        vo接收封装结果
+        List<ArticleListVo> articleListVos = BeanCopyUtils.copyBeanList(articles, ArticleListVo.class);
+        PageVo pageVo = new PageVo(articleListVos, page.getTotal());
+        return Result.ok(pageVo);
     }
 }
 
