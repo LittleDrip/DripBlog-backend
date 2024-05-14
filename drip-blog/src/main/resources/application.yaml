@@ -3,6 +3,12 @@ server:
   port: 7777
   servlet:
     context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+
 
 #druid连接池
 spring:
