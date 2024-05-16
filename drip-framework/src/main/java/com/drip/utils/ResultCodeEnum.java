@@ -18,6 +18,7 @@ public enum ResultCodeEnum {
     REQUIRE_USERNAME(504, "必需填写用户名"),
     LOGIN_ERROR(505,"用户名或密码错误");
 
+
     private Integer code;
     private String message;
     private ResultCodeEnum(Integer code, String message) {
