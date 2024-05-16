@@ -37,7 +37,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             return;
         }
         //解析token
-        String userid; //把userid定义在外面，才能同时  用于下面的46行和52行
+        String userid; //把userid定义在外面，才能同时用于下面的46行和52行
         try {
             Claims claims = JwtUtil.parseJWT(xxtoken);
             userid = claims.getSubject();

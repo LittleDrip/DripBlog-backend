@@ -1,7 +1,9 @@
 package com.drip.config;
 
+import com.drip.filter.JwtAuthenticationTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -10,8 +12,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-
+@ComponentScan("com.drip.filter")
 @Configuration
 @EnableWebSecurity
 //实现Security提供的WebSecurityConfigurerAdapter类，就可以改变密码校验的规则了
@@ -20,6 +23,8 @@ public class SecurityConfig {
 
     @Autowired
     private AuthenticationConfiguration authenticationConfiguration;
+    @Autowired
+    private JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
 
     @Bean
     //把BCryptPasswordEncoder对象注入Spring容器中，SpringSecurity就会使用该PasswordEncoder来进行密码校验
@@ -42,7 +47,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers("/login").anonymous() // 允许匿名访问登录接口
                 .anyRequest().permitAll(); // 其他所有请求都不需要身份认证
-
+        http.logout().disable();
+        http.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
+//      允许跨域
+        http.cors();
         return http.build();
     }
 
