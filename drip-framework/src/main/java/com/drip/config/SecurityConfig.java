@@ -55,6 +55,7 @@ public class SecurityConfig {
                 .disable() // 不通过Session获取SecurityContext
                 .authorizeHttpRequests()
                 .requestMatchers("/login").anonymous() // 允许匿名访问登录接口
+                .requestMatchers("/logout").authenticated()
                 .anyRequest().permitAll(); // 其他所有请求都不需要身份认证
         http.logout().disable();
         http.exceptionHandling()

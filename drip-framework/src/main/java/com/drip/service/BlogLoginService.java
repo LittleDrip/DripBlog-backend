@@ -5,4 +5,6 @@ import com.drip.utils.Result;
 
 public interface BlogLoginService {
      Result login(User user);
+
+     Result logout();
 }
